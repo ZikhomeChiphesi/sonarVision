@@ -6,6 +6,30 @@ a blind or low-vision user sense nearby obstacles and recognize known
 people. It runs as a single-page web client served by a small backend that
 relays sonar readings over Socket.IO.
 
+## 0. Current status
+
+This repository currently contains **only the browser client** (`index.html`).
+Everything below describes the intended full system, but not everything is
+implemented here yet — this section says which is which.
+
+**Implemented and working today, client-side, no hardware required:**
+- Object detection (COCO-SSD / TensorFlow.js)
+- Face recognition + enrollment (`@vladmandic/face-api`), stored locally in IndexedDB
+- Audio sonification, Web Speech identity/alert announcements, vibration feedback
+- Graceful fallback to "sonar only" or "camera unavailable" modes
+- Zone calibration, saved to `localStorage`
+
+**Described in this README but not yet in this repository:**
+- The Arduino/ESP32 + HC-SR04 sonar firmware
+- The Node.js + Socket.IO backend that relays real distance readings to the client
+- Automated tests
+
+The client already listens for a `distance` Socket.IO event in the shape
+described in §4.1 — it just has nothing producing that event yet. Building
+the sensor + backend is the next milestone; until then, the sonar-fusion
+behavior described in this document is designed but unverified end-to-end.
+
+
 ## 1. What it does
 
 - Reads live distance (and closing speed) from an ultrasonic sensor
